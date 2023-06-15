@@ -7,35 +7,35 @@ const initialState = {
   error: null,
 };
 
-const inserReducer = (state, action) => {
+const insertReducer = (state, action) => {
   switch (action.type) {
     case "LOADING":
-        return {loading: true, error: null}
+      return { loading: true, error: null };
     case "INSERTED_DOC":
-        return {loading: false, error: null}
+      return { loading: false, error: null };
     case "ERROR":
-        return{loading: false, error: action.payload}
+      return { loading: false, error: action.payload };
     default:
-        return state;
+      return state;
   }
 };
 
 export const useInsertDocument = (docCollection) => {
-  const [response, dispatch] = useReducer(inserReducer, initialState);
+  const [response, dispatch] = useReducer(insertReducer, initialState);
 
   //deal with memory leak
   const [cancelled, setCancelled] = useState(false);
 
-  const checkCancelBeforeDispatch = () => {
-    if (!cancelled) {
+  const checkCancelBeforeDispatch = (action) => {
+    if (cancelled) {
       dispatch(action);
     }
   };
 
   const insertDocument = async (document) => {
     checkCancelBeforeDispatch({
-        type: "LOADING",
-      });
+      type: "LOADING",
+    });
 
     try {
       const newDocument = { ...document, createdAt: Timestamp.now() };
@@ -47,22 +47,22 @@ export const useInsertDocument = (docCollection) => {
 
       checkCancelBeforeDispatch({
         type: "INSERTED_DOC",
-        payload: insertDocument,
+        payload: insertedDocument,
       });
     } catch (error) {
-        checkCancelBeforeDispatch({
-            type: "ERROR",
-            payload: error.message,
-          });
+      checkCancelBeforeDispatch({
+        type: "ERROR",
+        payload: error.message,
+      });
     }
   };
 
-  useEffect(()=> {
-    setCancelled(true)
-  }, )
+  useEffect(() => {
+    return () => setCancelled(true);
+  }, []);
 
   return {
     insertDocument,
-    response,
-  }
+    response
+  };
 };
