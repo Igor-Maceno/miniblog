@@ -31,7 +31,7 @@ function Home() {
         {posts && posts.length === 0 && (
           <div className={styles.noposts}>
             <p>Não foram encontrados posts</p>
-            <Link to="/posts/create" className="btn">Criar primeiro post</Link>
+            <Link to="/post/create" className="btn">Criar primeiro post</Link>
           </div>
         )}
       </div>
