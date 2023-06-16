@@ -6,7 +6,6 @@ import {
   orderBy,
   onSnapshot,
   where,
-  QuerySnapshot,
 } from "firebase/firestore";
 
 export const useFetchDocuments = (docCollection, search = null, uid = null) => {
@@ -20,13 +19,17 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
   useEffect(() => {
     async function loadData() {
       if (cancelled) return;
-
+      
       setLoading(true);
 
       const collectionRef = await collection(db, docCollection);
 
       try {
         let q;
+
+        //busca 
+        //dashboard
+        
         q = await query(collectionRef, orderBy("createdAt", "desc"));
 
         await onSnapshot(q, (querySnapshot) => {
@@ -53,6 +56,8 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
   useEffect(() => {
     return () => setCancelled(true);
   }, []);
+
+  console.log("Documentos: ", documents)
 
   return {
     documents,
