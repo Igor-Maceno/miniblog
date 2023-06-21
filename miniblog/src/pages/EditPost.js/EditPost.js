@@ -3,7 +3,7 @@ import styles from "./EditPost.module.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthValue } from "../../context/AuthContext";
-import { useInsertDocument } from "../../hooks/useInsertDocument";
+import { useUpdateDocument } from "../../hooks/useUpdateDocument";
 import { useFetchDocument } from "../../hooks/useFetchDocument";
 
 const EditPost = () => {
@@ -29,7 +29,7 @@ const EditPost = () => {
 
   const { user } = useAuthValue();
 
-  const { insertDocument, response } = useInsertDocument("post");
+  const { updateDocument, response } = useUpdateDocument("post");
 
   const navigate = useNavigate();
 
@@ -57,14 +57,16 @@ const EditPost = () => {
       return;
     }
 
-    insertDocument({
+    const data = {
       title,
       image,
       body,
       tagsArray,
       uid: user.uid,
       createdBy: user.displayName,
-    });
+    }
+
+    updateDocument(id, data);
 
     console.log(response.error);
 
