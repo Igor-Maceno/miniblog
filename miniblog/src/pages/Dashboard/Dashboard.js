@@ -9,7 +9,9 @@ import { useDeleteDocument } from "../../hooks/useDeleteDocument";
 
 const Dashboard = () => {
   const { user } = useAuthValue();
-  const uid = user.id;
+  const uid = user.uid;
+
+  console.log("Usuário: ", uid)
 
   const { documents: posts, loading } = useFetchDocuments("post", null, uid);
 
